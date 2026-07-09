@@ -1,0 +1,15 @@
+# Archivos temporales de Python
+__pycache__/
+
+# Carpetas de Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Archivos de sistema (macOS/Windows)
+.DS_Store
+Thumbs.db
+
+# Datos (opcional: no subas los raw data si pesan gigas)
+data/raw/
+
+#entorno de uv
+.venv/
