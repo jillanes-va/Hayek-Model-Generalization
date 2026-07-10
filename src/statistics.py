@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from src.config import ConfigGlobal
 
 def calcular_gelman_rubin(historial_precios: np.ndarray, R_window: int) -> float:
     """
@@ -48,3 +49,14 @@ def exportar_datos_simulacion(historial_macro: np.ndarray,
     if transacciones:
         df_micro = pd.DataFrame(transacciones)
         df_micro.to_parquet(ruta_salida / f"{nombre_experimento}_micro_tx.parquet")
+
+
+def calcular_equilibrio_marshalliano(config: ConfigGlobal, p_max: float = 30.0, puntos: int = 500) -> Tuple[float, float]:
+    """Calcula numéricamente el P* y Q* del equilibrio neoclásico."""
+    precios = np.linspace(0.1, p_max, puntos)
+    
+    q_demanda = config.dimensiones.N * config.consumidores.curva_demanda(precios)
+    q_oferta = config.dimensiones.M * config.productores.curva_oferta(precios)
+    
+    idx = np.argmin(np.abs(q_demanda - q_oferta))
+    return precios[idx], q_oferta[idx]
