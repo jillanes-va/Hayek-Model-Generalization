@@ -7,7 +7,6 @@ import numpy as np
 # Todas reciben arreglos de NumPy (para aprovechar la vectorización) y devuelven arreglos.
 FuncionCosto = Callable[[np.ndarray], np.ndarray]      # f(q) -> costo total
 FuncionDemanda = Callable[[np.ndarray], np.ndarray]    # f(p) -> cantidad demandada
-FuncionOferta = Callable[[np.ndarray], np.ndarray]     # f(p) -> cantidad ofrecida (si aplica heurística estática)
 
 # --- CURVAS PREDETERMINADAS (Por defecto) ---
 

@@ -1,4 +1,4 @@
-# src/estructuras.py
+# src/data_structures.py
 from dataclasses import dataclass
 import numpy as np
 
