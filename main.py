@@ -18,6 +18,9 @@ def correr_simulacion():
     for t in range(t_max):
         # 1. El mercado opera ciegamente
         mercado.ejecutar_periodo(t)
+
+        if t % 100 == 0:
+            print('Iteración:', t, 'de', t_max)
         
         # 2. El orquestador (tú) evalúa la macroestructura
         if t >= R:

@@ -1,9 +1,9 @@
 # src/market.py
 import numpy as np
 from typing import List, Dict, Tuple
-from config import ConfigGlobal
-from agents import SectorConsumidor, SectorProductor
-from data_structures import EstadisticasPeriodo, Transaccion
+from src.config import ConfigGlobal
+from src.agents import SectorConsumidor, SectorProductor
+from src.data_structures import EstadisticasPeriodo, Transaccion
 
 class Mercado:
     """

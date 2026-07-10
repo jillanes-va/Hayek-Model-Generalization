@@ -1,6 +1,6 @@
 # src/agents.py
 import numpy as np
-from config import ConfigGlobal
+from src.config import ConfigGlobal
 from typing import Optional
 
 class SectorConsumidor:

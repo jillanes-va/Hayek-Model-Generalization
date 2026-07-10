@@ -39,8 +39,8 @@ def oferta_particular(p: np.ndarray) -> np.ndarray:
 class ParamsDimensiones:
     N: int = 500             # Consumidores
     M: int = 50              # Firmas
-    t_max: int = 1000        # Periodos
-    J: int = 4               # Cadenas de Markov independientes
+    t_max: int = 500        # Periodos
+    J: int = 3               # Cadenas de Markov independientes
 
 @dataclass(frozen=True)
 class ParamsInstitucionales:

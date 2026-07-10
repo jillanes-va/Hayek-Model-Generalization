@@ -13,5 +13,4 @@ data/raw/
 
 #entorno de uv
 .venv/
-uv.lock
 .python-version
