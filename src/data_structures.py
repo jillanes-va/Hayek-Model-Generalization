@@ -2,6 +2,16 @@
 from dataclasses import dataclass
 import numpy as np
 
+from typing import NamedTuple
+
+class Transaccion(NamedTuple):
+    periodo: int
+    id_cadena: int       # NUEVO: Vital para no mezclar los J universos paralelos
+    id_consumidor: int
+    id_firma: int
+    precio: float
+    cantidad: float
+
 @dataclass(frozen=True)
 class EstadisticasPeriodo:
     periodo: int

@@ -4,6 +4,33 @@ import numpy as np
 from pathlib import Path
 from market import Mercado
 
+def calcular_gelman_rubin(historial_precios: np.ndarray, R_window: int) -> float:
+    """
+    Calcula el estadístico R-hat para evaluar la convergencia hacia el Orden Espontáneo.
+    
+    Parámetros:
+    - historial_precios: Matriz de (J_cadenas, t_periodos).
+    - R_window: Ventana de tiempo (profundidad) a evaluar.
+    """
+    J = historial_precios.shape[0]
+    datos = historial_precios[:, -R_window:]
+    
+    medias_cadenas = np.mean(datos, axis=1)
+    media_global = np.mean(medias_cadenas)
+    
+    # Varianza Entre-cadenas (Between-chain variance)
+    B = (R_window / (J - 1)) * np.sum((medias_cadenas - media_global)**2)
+    
+    # Varianza Intra-cadenas (Within-chain variance)
+    varianzas_internas = np.var(datos, axis=1, ddof=1)
+    W = np.mean(varianzas_internas)
+    
+    if W == 0.0:
+        return 1.0
+        
+    V_hat = ((R_window - 1) / R_window) * W + (1 / R_window) * B
+    return float(np.sqrt(V_hat / W))
+
 def exportar_datos_simulacion(mercado: Mercado, nombre_experimento: str = "simulacion_base"):
     """
     Toma los historiales del mercado y los guarda en data/raw/
