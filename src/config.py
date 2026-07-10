@@ -1,6 +1,6 @@
 # src/configuracion.py
 from dataclasses import dataclass, field
-from typing import Callable
+from typing import Callable, Optional
 import numpy as np
 
 # Definición de tipos para las funciones personalizadas:
@@ -54,20 +54,17 @@ class ParamsInstitucionales:
 class ParamsConsumidor:
     # Inyección de la curva de demanda personalizada
     curva_demanda: FuncionDemanda = demanda_particular
-    presupuesto_medio: float = 100.0
-    presupuesto_sigma: float = 0.2
 
 @dataclass(frozen=True)
 class ParamsProductor:
     # Inyección de la curva de costos personalizada
     curva_costo: FuncionCosto = costo_particular
-    capacidad_max_produccion: float = 150.0
     curva_oferta: FuncionOferta = oferta_particular
-    
-    # Parámetros de las heurísticas adaptativas
-    factor_ajuste_precio: float = 0.05
-    factor_ajuste_produccion: float = 0.10
-    tasa_depreciacion_stock: float = 0.20
+    capacidad_max_produccion: float = 150.0
+
+    #Memoria y exploración estocástica
+    T_memoria: int = 5           # Periodos de historia que la firma recuerda
+    sigma_temblor: float = 0.05  # Desviación estándar del ruido exploratorio (temblor)
 
 @dataclass(frozen=True)
 class ConfigGlobal:
@@ -76,6 +73,8 @@ class ConfigGlobal:
     consumidores: ParamsConsumidor = field(default_factory=ParamsConsumidor)
     productores: ParamsProductor = field(default_factory=ParamsProductor)
     seed: int = 42
+
+    precios_init: Optional[np.ndarray] = None
 
     def obtener_rng(self) -> np.random.Generator:
         return np.random.default_rng(self.seed)

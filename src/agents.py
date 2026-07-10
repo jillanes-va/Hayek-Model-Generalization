@@ -48,10 +48,8 @@ class SectorProductor:
         self.rng = self.config.obtener_rng()
         
         # Parámetros de la heurística (asumimos que los agregarás al config.py)
-        # self.T = config.productores.T_memoria
-        # self.sigma = config.productores.sigma_temblor
-        self.T = 5          # Fijo aquí temporalmente para el ejemplo
-        self.sigma = 0.05   # Desviación estándar del temblor
+        self.T = config.productores.T_memoria
+        self.sigma = config.productores.sigma_temblor
         
         # --- VALIDACIÓN INICIAL ---
         assert isinstance(precios_iniciales, np.ndarray) and precios_iniciales.shape == (self.M,)

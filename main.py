@@ -26,7 +26,7 @@ def correr_simulacion():
         if t >= R:
             r_hat = calcular_gelman_rubin(mercado.historial_precios_macro, R)
             
-            if r_hat < G:
+            if r_hat < G and t > 400: #Check de convergencia estricta después de un burn-in
                 print(f"\nConvergencia alcanzada en el periodo {t}")
                 print(f"Estadístico R-hat final: {r_hat:.4f}")
                 convergio = True

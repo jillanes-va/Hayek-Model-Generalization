@@ -37,12 +37,17 @@ class Mercado:
             # Semilla independiente para cada cadena: config.seed + j
             rng_cadena = np.random.default_rng(self.config.seed + j)
             
-            # Inicialización de precios aleatoria para el periodo 0
-            precios_init = rng_cadena.uniform(5.0, 25.0, size=self.M)
+           # --- LÓGICA DE INICIALIZACIÓN DE PRECIOS ---
+            if self.config.precios_init is not None:
+                # Tomamos la fila j de tu matriz y usamos .copy() por seguridad
+                precios_iniciales = self.config.precios_init[j].copy()
+            else:
+                # Fallback original: precios aleatorios entre 5 y 25
+                precios_iniciales = rng_cadena.uniform(5.0, 25.0, size=self.M)
             
             # Instanciamos los sectores pasándoles el config
             # (Asumimos que internamente usan el config para leer sus curvas)
-            prod = SectorProductor(self.config, precios_iniciales=precios_init)
+            prod = SectorProductor(self.config, precios_iniciales=precios_iniciales)
             cons = SectorConsumidor(self.config)
             
             # Forzamos a que usen el RNG de su respectiva cadena
