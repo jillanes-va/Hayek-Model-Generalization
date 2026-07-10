@@ -28,7 +28,7 @@ def calcular_gelman_rubin(historial_precios: np.ndarray, R_window: int) -> float
         return 1.0
         
     V_hat = ((R_window - 1) / R_window) * W + (1 / R_window) * B
-    return float(np.sqrt(V_hat / W))
+    return float(V_hat / W)
 
 def exportar_datos_simulacion(historial_macro: np.ndarray, 
                               transacciones: list, 
