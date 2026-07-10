@@ -7,15 +7,16 @@ import numpy as np
 # Todas reciben arreglos de NumPy (para aprovechar la vectorización) y devuelven arreglos.
 FuncionCosto = Callable[[np.ndarray], np.ndarray]      # f(q) -> costo total
 FuncionDemanda = Callable[[np.ndarray], np.ndarray]    # f(p) -> cantidad demandada
+FuncionOferta = Callable[[np.ndarray], np.ndarray]    # f(p) -> cantidad ofrecida
 
 # --- CURVAS PREDETERMINADAS (Por defecto) ---
 
 def costo_particular(q: np.ndarray) -> np.ndarray:
-    """Función de costo estándar: CF + CVM * q"""
+    """Función de costo estándar: CF + CVM * q**2"""
     costo_fijo = 10.0
     costo_marginal = 2.0
     # np.where asegura que si la producción es cero, solo se pague el costo fijo
-    return np.where(q > 0, costo_fijo + costo_marginal * q, 0.0)
+    return np.where(q > 0, costo_fijo + costo_marginal * q**2, 0.0)
 
 def demanda_particular(p: np.ndarray) -> np.ndarray:
     """Función de demanda estándar: q = p ^ epsilon_d"""
@@ -23,6 +24,13 @@ def demanda_particular(p: np.ndarray) -> np.ndarray:
     # Evitamos división por cero o raíces negativas asegurando un precio mínimo
     p_seguro = np.maximum(p, 1e-4)
     return p_seguro ** epsilon_d
+
+def oferta_particular(p: np.ndarray) -> np.ndarray:
+    """Función de oferta estándar: q = p / (2 * c) para un costo marginal lineal"""
+    c = 0.5
+    # CMg = 2 * c * q  =>  q = P / (2 * c)
+    produccion_optima = p / (2 * c)
+    return np.maximum(produccion_optima, 0.0) # Evita producciones negativas
 
 
 # --- CONFIGURACIÓN ESTRUCTURADA ---
@@ -54,6 +62,7 @@ class ParamsProductor:
     # Inyección de la curva de costos personalizada
     curva_costo: FuncionCosto = costo_particular
     capacidad_max_produccion: float = 150.0
+    curva_oferta: FuncionOferta = oferta_particular
     
     # Parámetros de las heurísticas adaptativas
     factor_ajuste_precio: float = 0.05

@@ -13,9 +13,12 @@ class Mercado:
     
     def __init__(self, config: ConfigGlobal):
         self.config = config
-        self.J = config.instituciones.J
+        self.J = config.dimensiones.J
+        self.R = config.instituciones.R
         self.L = config.instituciones.L
+        self.G = config.instituciones.G
         self.deepest_search = config.instituciones.deepest_search
+        
         
         self.N = config.dimensiones.N
         self.M = config.dimensiones.M
@@ -27,6 +30,8 @@ class Mercado:
         # Instanciamos los agentes para cada cadena (aislando las semillas aleatorias)
         self.cadenas_consumidores = []
         self.cadenas_productores = []
+
+        self.registro_transacciones = []
         
         for j in range(self.J):
             # Semilla independiente para cada cadena: config.seed + j
@@ -42,15 +47,14 @@ class Mercado:
             
             # Forzamos a que usen el RNG de su respectiva cadena
             prod.rng = rng_cadena
-            cons.rng = rng_cadena
+            #cons.rng = rng_cadena          # No es necesario para consumidores si no hay aleatoriedad interna
             
             self.cadenas_productores.append(prod)
             self.cadenas_consumidores.append(cons)
 
-    def ejecutar_periodo(self, t: int) -> bool:
+    def ejecutar_periodo(self, t: int) -> None:
         """
         Ejecuta un periodo completo para las J cadenas.
-        Retorna True si el sistema convergió según Gelman-Rubin, False en caso contrario.
         """
         precios_promedio_cadenas = np.zeros(self.J)
 
@@ -111,7 +115,16 @@ class Mercado:
                     q_vendida_firmas[id_firma] += q_transada
                     ingresos_firmas[id_firma] += (q_transada * precio_transaccion)
                     
-                    # (Aquí guardarías la Transaccion en tu bitácora cruda)
+                    # --- RECOLECCIÓN DE DATOS CRUDOS ---
+                    tx = Transaccion(
+                        periodo=t,
+                        id_cadena=j,
+                        id_consumidor=int(i),
+                        id_firma=int(id_firma),
+                        precio=float(precio_transaccion),
+                        cantidad=float(q_transada)
+                    )
+                    self.registro_transacciones.append(tx)
                     
                     if demanda_restante[i] <= 0:
                         break # Consumidor sació su demanda, sale del mercado
@@ -135,45 +148,3 @@ class Mercado:
         # --- EVALUACIÓN DE CONVERGENCIA DEL SISTEMA ---
         # Anexamos los precios del periodo actual al historial global
         self.historial_precios_macro = np.column_stack((self.historial_precios_macro, precios_promedio_cadenas))
-        
-        # Calculamos Gelman-Rubin si ya tenemos suficientes periodos (R)
-        if t >= self.config.instituciones.R:
-            r_hat = self.calcular_gelman_rubin()
-            if r_hat < self.config.instituciones.G:
-                return True # El sistema convergió
-                
-        return False
-
-    def calcular_gelman_rubin(self) -> float:
-        """
-        Calcula el estadístico R-hat para el precio promedio entre las J cadenas,
-        utilizando los últimos R periodos del historial.
-        """
-        R_window = self.config.instituciones.R
-        J = self.J
-        
-        # Extraemos solo la matriz de los últimos R periodos. Forma: (J, R)
-        datos = self.historial_precios_macro[:, -R_window:]
-        
-        # Media de cada cadena (sobre el tiempo)
-        medias_cadenas = np.mean(datos, axis=1)
-        
-        # Media global (sobre las cadenas y el tiempo)
-        media_global = np.mean(medias_cadenas)
-        
-        # Varianza Entre-cadenas (Between-chain variance: B)
-        B = (R_window / (J - 1)) * np.sum((medias_cadenas - media_global)**2)
-        
-        # Varianza Intra-cadenas (Within-chain variance: W)
-        varianzas_internas = np.var(datos, axis=1, ddof=1)
-        W = np.mean(varianzas_internas)
-        
-        if W == 0.0:
-            return 1.0 # Evita división por cero si el sistema se congeló en un valor exacto
-            
-        # Estimación de la varianza total del sistema
-        V_hat = ((R_window - 1) / R_window) * W + (1 / R_window) * B
-        
-        # Estadístico R-hat
-        r_hat = np.sqrt(V_hat / W)
-        return float(r_hat)

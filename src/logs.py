@@ -1,13 +1,14 @@
 # src/logs.py
 import logging
+from pathlib import Path
 
-def configurar_auditoria(nombre_archivo: str = "data/raw/simulacion.log"):
+def configurar_logger():
+    ruta_logs = Path("data/logs")
+    ruta_logs.mkdir(parents=True, exist_ok=True)
+    
     logging.basicConfig(
+        filename=ruta_logs / "mercado.log",
         level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] (Periodo %(threadName)s): %(message)s",
-        handlers=[
-            logging.FileHandler(nombre_archivo, mode='w'),
-            logging.StreamHandler() # Muestra en consola también
-        ]
+        format="%(asctime)s - Cadena %(threadName)s - [%(levelname)s]: %(message)s"
     )
     return logging.getLogger("ABM_Hayek")
