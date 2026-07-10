@@ -38,9 +38,9 @@ class Mercado:
             rng_cadena = np.random.default_rng(self.config.seed + j)
             
            # --- LÓGICA DE INICIALIZACIÓN DE PRECIOS ---
-            if self.config.precios_init is not None:
+            if self.config.precios_iniciales is not None:
                 # Tomamos la fila j de tu matriz y usamos .copy() por seguridad
-                precios_iniciales = self.config.precios_init[j].copy()
+                precios_iniciales = self.config.precios_iniciales[j].copy()
             else:
                 # Fallback original: precios aleatorios entre 5 y 25
                 precios_iniciales = rng_cadena.uniform(5.0, 25.0, size=self.M)

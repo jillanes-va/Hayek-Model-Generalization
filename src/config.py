@@ -74,7 +74,7 @@ class ConfigGlobal:
     productores: ParamsProductor = field(default_factory=ParamsProductor)
     seed: int = 42
 
-    precios_init: Optional[np.ndarray] = None
+    precios_iniciales: Optional[np.ndarray] = None
 
     def obtener_rng(self) -> np.random.Generator:
         return np.random.default_rng(self.seed)

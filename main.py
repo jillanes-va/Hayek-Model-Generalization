@@ -3,10 +3,29 @@ from src.config import ConfigGlobal
 from src.market import Mercado
 from src.statistics import calcular_gelman_rubin, exportar_datos_simulacion
 
+import numpy as np
+from dataclasses import replace
+
 def correr_simulacion():
     print("Iniciando simulación Hayekiana...")
     
     config = ConfigGlobal()
+
+    #=================ESPACIO DE EXPERIMENTACION===================
+
+    rng = np.random.default_rng(config.seed)
+    M = config.dimensiones.M
+    J = config.dimensiones.J
+    
+    matriz_precios = np.zeros((J, M))
+    matriz_precios[0, :] = rng.uniform(0.2, 0.8, size=M)  # Cadena 0: Sociedad de precios bajos
+    matriz_precios[1, :] = rng.uniform(1.0, 2.0, size=M)  # Cadena 1: Sociedad de precios medios
+    matriz_precios[2, :] = rng.uniform(4.0, 5.0, size=M)  # Cadena 2: Sociedad de precios altos
+
+    config = replace(config, precios_iniciales=matriz_precios)
+
+    #==============================================================
+
     mercado = Mercado(config)
     
     t_max = config.dimensiones.t_max
