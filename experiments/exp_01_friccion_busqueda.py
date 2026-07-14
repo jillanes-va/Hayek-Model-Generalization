@@ -1,4 +1,4 @@
-# main.py
+# experiments/exp_01_friccion_busqueda.py
 from src.config import ConfigGlobal
 from src.market import Mercado
 from src.statistics import calcular_gelman_rubin, exportar_datos_simulacion
@@ -11,7 +11,7 @@ def correr_simulacion():
     
     config = ConfigGlobal()
 
-    #=================Inicialización particular de precios==================
+    #=================ESPACIO DE EXPERIMENTACION===================
 
     rng = np.random.default_rng(config.seed)
     M = config.dimensiones.M
@@ -22,9 +22,11 @@ def correr_simulacion():
     matriz_precios[1, :] = rng.uniform(1.0, 2.0, size=M)  # Cadena 1: Sociedad de precios medios
     matriz_precios[2, :] = rng.uniform(4.0, 5.0, size=M)  # Cadena 2: Sociedad de precios altos
 
-    config = replace(config, precios_iniciales=matriz_precios)
+    new_institutions = replace(config.instituciones, deepest_search=1)
 
-    #======================================================================
+    config = replace(config, precios_iniciales=matriz_precios, instituciones=new_institutions)
+
+    #==============================================================
 
     mercado = Mercado(config)
     

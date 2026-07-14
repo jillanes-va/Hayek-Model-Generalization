@@ -9,8 +9,12 @@ __pycache__/
 Thumbs.db
 
 # Datos (opcional: no subas los raw data si pesan gigas)
-data/raw/
+data/*
+!data/processed/
 
-#entorno de uv
+# Entorno de uv
 .venv/
 .python-version
+
+# Ignorar logs
+*.log
