@@ -52,7 +52,7 @@ class Mercado:
             
             # Forzamos a que usen el RNG de su respectiva cadena
             prod.rng = rng_cadena
-            #cons.rng = rng_cadena          # No es necesario para consumidores si no hay aleatoriedad interna
+            #cons.rng = rng_cadena # Si quieres que los consumidores también tengan un RNG independiente
             
             self.cadenas_productores.append(prod)
             self.cadenas_consumidores.append(cons)
@@ -88,7 +88,7 @@ class Mercado:
             
             # El consumidor evalúa su demanda en base al mejor precio encontrado (índice 0)
             mejores_precios_vistos = np.min(precios_muestras, axis=1)
-            demanda_restante = cons.calcular_demanda(mejores_precios_vistos)
+            demanda_restante = cons.calcular_demanda(mejores_precios_vistos, rng_activo=rng)  # Vector de tamaño N
             
             # --- FASE DE ASIGNACIÓN SECUENCIAL ---
             # Orden aleatorio de llegada al mercado para no favorecer a los primeros índices

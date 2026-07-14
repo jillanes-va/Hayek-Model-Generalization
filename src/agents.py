@@ -12,14 +12,16 @@ class SectorConsumidor:
     def __init__(self, config: ConfigGlobal):
         self.config = config
         self.N = config.dimensiones.N
+        self.rng = config.obtener_rng
 
-    def calcular_demanda(self, precios_enfrentados: np.ndarray) -> np.ndarray:
+    def calcular_demanda(self, precios_enfrentados: np.ndarray, rng_activo : np.random.Generator | None = None) -> np.ndarray:
         """
         Calcula la cantidad demandada puramente en base a la curva teórica.
         
         Parámetros:
         - precios_enfrentados: Arreglo 1D de tamaño N o 1.
-                               
+        - rng_activo: Generador de números aleatorios para la simulación.
+
         Retorna:
         - Arreglo 1D de tamaño N con las cantidades demandadas.
         """
@@ -30,8 +32,7 @@ class SectorConsumidor:
 
         # --- EVALUACIÓN PURA ---
         # Evalúa estrictamente la función inyectada desde config.py
-        demanda = self.config.consumidores.curva_demanda(precios_enfrentados)
-
+        demanda = self.config.consumidores.curva_demanda(precios_enfrentados, rng_activo=rng_activo)
         return demanda
 
 

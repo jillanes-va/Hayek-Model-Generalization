@@ -5,9 +5,9 @@ import numpy as np
 
 # Definición de tipos para las funciones personalizadas:
 # Todas reciben arreglos de NumPy (para aprovechar la vectorización) y devuelven arreglos.
-FuncionCosto = Callable[[np.ndarray], np.ndarray]      # f(q) -> costo total
-FuncionDemanda = Callable[[np.ndarray], np.ndarray]    # f(p) -> cantidad demandada
-FuncionOferta = Callable[[np.ndarray], np.ndarray]    # f(p) -> cantidad ofrecida
+FuncionCosto = Callable[..., np.ndarray]      # f(q, **kwargs) -> costo total
+FuncionDemanda = Callable[..., np.ndarray]    # f(p, **kwargs) -> cantidad demandada
+FuncionOferta = Callable[..., np.ndarray]     # f(p, **kwargs) -> cantidad ofrecida
 
 # --- CURVAS PREDETERMINADAS (Por defecto) ---
 
@@ -18,8 +18,9 @@ def costo_particular(q: np.ndarray) -> np.ndarray:
     # np.where asegura que si la producción es cero, solo se pague el costo fijo
     return np.where(q > 0, costo_fijo + costo_marginal * q**2, 0.0)
 
-def demanda_particular(p: np.ndarray) -> np.ndarray:
+def demanda_particular(p: np.ndarray, **kwargs) -> np.ndarray:
     """Función de demanda estándar: q = p ^ epsilon_d"""
+    print("¡ALERTA: Entrando a la función particular!") # <-- Añade esto
     epsilon_d = -1.2
     # Evitamos división por cero o raíces negativas asegurando un precio mínimo
     p_seguro = np.maximum(p, 1e-4)

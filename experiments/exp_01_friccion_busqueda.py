@@ -26,6 +26,10 @@ def correr_simulacion():
 
     #=================ESPACIO DE EXPERIMENTACION===================
 
+    def demanda_estocastica(p: np.ndarray, rng_activo: np.random.Generator | None = config.obtener_rng()) -> np.ndarray:
+        """Función inyectada desde el experimento."""
+        return 10 - 0.5 * p**1.5
+
     rng = np.random.default_rng(config.seed)
     M = config.dimensiones.M
     J = config.dimensiones.J
@@ -35,9 +39,9 @@ def correr_simulacion():
     matriz_precios[1, :] = rng.uniform(1.0, 2.0, size=M)  # Cadena 1: Sociedad de precios medios
     matriz_precios[2, :] = rng.uniform(4.0, 5.0, size=M)  # Cadena 2: Sociedad de precios altos
 
-    new_institutions = replace(config.instituciones, deepest_search=10)
+    nuevos_consumidores = replace(config.consumidores, curva_demanda=demanda_estocastica)
 
-    config = replace(config, precios_iniciales=matriz_precios, instituciones=new_institutions)
+    config = replace(config, precios_iniciales=matriz_precios, consumidores=nuevos_consumidores)
 
     #==============================================================
 
@@ -46,6 +50,7 @@ def correr_simulacion():
     t_max = config.dimensiones.t_max
     R = config.instituciones.R
     G = config.instituciones.G
+
     
     convergio = False
     
