@@ -19,16 +19,18 @@ from src.statistics import calcular_gelman_rubin, exportar_datos_simulacion
 import numpy as np
 from dataclasses import replace
 
-def correr_simulacion():
-    print("Iniciando simulación Hayekiana...")
-    
+def demanda_estocastica(p: np.ndarray, rng_activo: np.random.Generator | None = None) -> np.ndarray:
+        """Función inyectada desde el experimento."""
+        return 10 - 0.5 * p**1.5
+
+def crear_config_experimento() -> ConfigGlobal:
+    """
+    Fábrica: Construye y retorna la configuración exacta de este experimento.
+    """
+
     config = ConfigGlobal()
 
     #=================ESPACIO DE EXPERIMENTACION===================
-
-    def demanda_estocastica(p: np.ndarray, rng_activo: np.random.Generator | None = config.obtener_rng()) -> np.ndarray:
-        """Función inyectada desde el experimento."""
-        return 10 - 0.5 * p**1.5
 
     rng = np.random.default_rng(config.seed)
     M = config.dimensiones.M
@@ -42,8 +44,13 @@ def correr_simulacion():
     nuevos_consumidores = replace(config.consumidores, curva_demanda=demanda_estocastica)
 
     config = replace(config, precios_iniciales=matriz_precios, consumidores=nuevos_consumidores)
+    
+    return config
 
-    #==============================================================
+def correr_simulacion():
+    print("Iniciando simulación Hayekiana...")
+
+    config = crear_config_experimento()
 
     mercado = Mercado(config)
     
