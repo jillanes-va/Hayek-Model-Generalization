@@ -23,7 +23,7 @@ def demanda_estocastica(p: np.ndarray, rng_activo: np.random.Generator | None = 
         """Función inyectada desde el experimento."""
         return 10 - 0.5 * p**1.5
 
-def crear_config_experimento() -> ConfigGlobal:
+def config_particular() -> ConfigGlobal:
     """
     Fábrica: Construye y retorna la configuración exacta de este experimento.
     """
@@ -50,7 +50,7 @@ def crear_config_experimento() -> ConfigGlobal:
 def correr_simulacion():
     print("Iniciando simulación Hayekiana...")
 
-    config = crear_config_experimento()
+    config = config_particular()
 
     mercado = Mercado(config)
     
