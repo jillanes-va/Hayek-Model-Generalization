@@ -1,5 +1,6 @@
 # src/estadisticas.py
 import pandas as pd
+from typing import List, Dict, Tuple
 import numpy as np
 from pathlib import Path
 from src.config import ConfigGlobal
@@ -51,7 +52,7 @@ def exportar_datos_simulacion(historial_macro: np.ndarray,
         df_micro.to_parquet(ruta_salida / f"{nombre_experimento}_micro_tx.parquet")
 
 
-def calcular_equilibrio_marshalliano(config: ConfigGlobal, p_max: float = 30.0, puntos: int = 500) -> Tuple[float, float]: # pyright: ignore[reportUndefinedVariable]
+def calcular_equilibrio_marshalliano(config: ConfigGlobal, p_max: float = 30.0, puntos: int = 500) -> Tuple[float, float]:
     """Calcula numéricamente el P* y Q* del equilibrio neoclásico."""
     precios = np.linspace(0.1, p_max, puntos)
     
