@@ -39,7 +39,7 @@ def oferta_particular(p: np.ndarray) -> np.ndarray:
 class ParamsDimensiones:
     N: int = 500             # Consumidores
     M: int = 50              # Firmas
-    t_max: int = 500        # Periodos
+    t_max: int = 1000        # Periodos
     J: int = 3               # Cadenas de Markov independientes
 
 @dataclass(frozen=True)
@@ -48,7 +48,7 @@ class ParamsInstitucionales:
     costo_merma: float = 0.0 
     deepest_search: int = 3  # Profundidad máxima de búsqueda de cada consumidor
     R: int = 50              # Ventana de periodos hacia atrás para evaluar la varianza
-    G: float = 1.1          # Umbral estricto de convergencia
+    G: float = 1.1           # Umbral estricto de convergencia
 
 @dataclass(frozen=True)
 class ParamsConsumidor:

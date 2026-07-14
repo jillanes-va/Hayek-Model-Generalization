@@ -3,12 +3,14 @@
 import sys
 from pathlib import Path
 
+#==================Ejecutar en carpeta correcta=======================================
 # Buscamos la carpeta que está un nivel arriba de este script (la raíz del proyecto)
 raiz_proyecto = str(Path(__file__).resolve().parent.parent)
 
 # La agregamos al principio del sistema de búsqueda de Python si no está presente
 if raiz_proyecto not in sys.path:
     sys.path.insert(0, raiz_proyecto)
+#=====================================================================================
 
 from src.config import ConfigGlobal
 from src.market import Mercado
@@ -33,7 +35,7 @@ def correr_simulacion():
     matriz_precios[1, :] = rng.uniform(1.0, 2.0, size=M)  # Cadena 1: Sociedad de precios medios
     matriz_precios[2, :] = rng.uniform(4.0, 5.0, size=M)  # Cadena 2: Sociedad de precios altos
 
-    new_institutions = replace(config.instituciones, deepest_search=1)
+    new_institutions = replace(config.instituciones, deepest_search=10)
 
     config = replace(config, precios_iniciales=matriz_precios, instituciones=new_institutions)
 

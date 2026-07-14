@@ -8,9 +8,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Datos (opcional: no subas los raw data si pesan gigas)
+# datos crudos y outputs
 data/*
 !data/processed/
+exports/*
 
 # Entorno de uv
 .venv/
