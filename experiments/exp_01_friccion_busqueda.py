@@ -1,4 +1,15 @@
 # experiments/exp_01_friccion_busqueda.py
+
+import sys
+from pathlib import Path
+
+# Buscamos la carpeta que está un nivel arriba de este script (la raíz del proyecto)
+raiz_proyecto = str(Path(__file__).resolve().parent.parent)
+
+# La agregamos al principio del sistema de búsqueda de Python si no está presente
+if raiz_proyecto not in sys.path:
+    sys.path.insert(0, raiz_proyecto)
+
 from src.config import ConfigGlobal
 from src.market import Mercado
 from src.statistics import calcular_gelman_rubin, exportar_datos_simulacion
