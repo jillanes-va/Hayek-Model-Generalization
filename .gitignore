@@ -11,7 +11,7 @@ Thumbs.db
 # datos crudos y outputs
 data/*
 !data/processed/
-exports/*
+outputs/*
 
 # Entorno de uv
 .venv/
