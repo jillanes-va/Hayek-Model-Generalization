@@ -112,7 +112,7 @@ class SectorProductor:
         self.produccion_actual = self.config.productores.curva_oferta(self.precios_actuales)
         
         # Validamos que no se intente producir cantidades negativas
-        self.produccion_actual = np.maximum(self.produccion_actual, 0.0)
+        self.produccion_actual = np.round(np.maximum(self.produccion_actual, 0.0))
         
         # Como el inventario no se conserva, la producción es directamente la oferta disponible
         return self.precios_actuales, self.produccion_actual
