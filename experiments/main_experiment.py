@@ -19,9 +19,9 @@ from src.statistics import calcular_gelman_rubin, exportar_datos_simulacion
 import numpy as np
 from dataclasses import replace
 
-def demanda_estocastica(p: np.ndarray, rng_activo: np.random.Generator | None = None) -> np.ndarray:
+def demanda_unitaria(p: np.ndarray, **kwargs) -> np.ndarray:
         """Función inyectada desde el experimento."""
-        return 10 - 0.5 * p**1.5
+        return np.ones(p.shape)
 
 def config_particular() -> ConfigGlobal:
     """
@@ -41,9 +41,9 @@ def config_particular() -> ConfigGlobal:
     matriz_precios[1, :] = rng.uniform(1.0, 2.0, size=M)  # Cadena 1: Sociedad de precios medios
     matriz_precios[2, :] = rng.uniform(4.0, 5.0, size=M)  # Cadena 2: Sociedad de precios altos
 
-    nuevos_consumidores = replace(config.consumidores, curva_demanda=demanda_estocastica)
-
-    config = replace(config, precios_iniciales=matriz_precios, consumidores=nuevos_consumidores)
+    nuevas_dimensiones = replace(config.dimensiones, N=10000, M=M, J=J)
+    nuevos_consumidores = replace(config.consumidores, curva_demanda=demanda_unitaria)
+    config = replace(config, precios_iniciales=matriz_precios, consumidores=nuevos_consumidores, dimensiones=nuevas_dimensiones)
     
     return config
 

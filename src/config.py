@@ -28,7 +28,7 @@ def demanda_particular(p: np.ndarray, **kwargs) -> np.ndarray:
 
 def oferta_particular(p: np.ndarray) -> np.ndarray:
     """Función de oferta estándar: q = p / (2 * c) para un costo marginal lineal"""
-    c = 0.5
+    c = 100
     # CMg = 2 * c * q  =>  q = P / (2 * c)
     produccion_optima = p / (2 * c)
     return np.maximum(produccion_optima, 0.0) # Evita producciones negativas
@@ -40,7 +40,7 @@ def oferta_particular(p: np.ndarray) -> np.ndarray:
 class ParamsDimensiones:
     N: int = 10000           # Consumidores
     M: int = 100             # Firmas
-    t_max: int = 1000        # Periodos
+    t_max: int = 10000       # Periodos
     J: int = 3               # Cadenas de Markov independientes
 
 @dataclass(frozen=True)
@@ -63,8 +63,8 @@ class ParamsProductor:
     capacidad_max_produccion: float = 150.0
 
     #Memoria y exploración estocástica
-    T_memoria: int = 5           # Periodos de historia que la firma recuerda
-    sigma_temblor: float = 0.05  # Desviación estándar del ruido exploratorio (temblor)
+    T_memoria: int = 1000          # Periodos de historia que la firma recuerda
+    sigma_temblor: float = 0.05    # Desviación estándar del ruido exploratorio (temblor)
 
 @dataclass(frozen=True)
 class ConfigGlobal:
